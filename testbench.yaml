@@ -18,6 +18,8 @@ workbench:
     factories: true
     commands: false
     components: false
+    # The demo registers its own view namespace in its service provider, the
+    # way an application would, so there is nothing here to discover either.
     views: false
     # The package's own routes are registered by the package, behind its
     # gates. The demo adds a landing page of its own to redirect into.
