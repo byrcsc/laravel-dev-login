@@ -148,6 +148,20 @@ interface TenantResolver
 Point `tenant_resolver` at your implementation. The value handed to it is
 whatever scalar you put in the profile's `tenant` key, untouched.
 
+The resolver runs before the user is looked up, so the lookup happens inside
+the tenant. A resolver that cannot make the tenant current throws, and the
+login stops there: nobody is authenticated into the wrong tenant.
+
+Profiles without a `tenant` never reach the resolver, so an application with no
+tenancy behaves exactly as it would if this section did not exist. A profile
+that does name a tenant while no `tenant_resolver` is configured is an error,
+because it is a button that cannot do what it says.
+
+An adapter for `spatie/laravel-multitenancy` is the first integration after
+v1. The contract was checked against both that package and `stancl/tenancy`
+before it shipped; the write-up is in
+[docs/tenant-resolver-paper-check.md](docs/tenant-resolver-paper-check.md).
+
 ## Routes and redirects
 
 | Method | URI | Name |

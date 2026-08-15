@@ -156,6 +156,11 @@ return [
     | The package ships the contract and no adapter: how a tenant becomes the
     | current one is something only your tenancy package knows.
     |
+    | It runs before the user is looked up, so the lookup happens inside the
+    | tenant. Profiles with no `tenant` never reach it. A profile that names a
+    | tenant while this is null throws, because a button that cannot do what it
+    | says is worse than a button that is not there.
+    |
     */
 
     'tenant_resolver' => null,

@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 beforeEach(function (): void {
     $this->withUsersTable();
-
-    CountingResolver::reset();
-    ArrayUserProvider::reset();
 });
 
 it('finds the profile user on the default guard provider', function (): void {
