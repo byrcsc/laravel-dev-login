@@ -1,0 +1,35 @@
+laravel: '@testbench'
+
+providers:
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  - ByRcsc\LaravelDevLogin\DevLoginServiceProvider
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  install: true
+  health: false
+  discovers:
+    # The demo app's own dev-login settings are set in its service provider
+    # rather than a published config file, so there is nothing to discover.
+    config: false
+    # The demo's people are made through a factory.
+    factories: true
+    commands: false
+    components: false
+    views: false
+    # The package's own routes are registered by the package, behind its
+    # gates. The demo adds a landing page of its own to redirect into.
+    web: true
+    api: false
+  build:
+    - create-sqlite-db
+    # The skeleton's own migrations are all this package needs: it reads the
+    # users table and writes nothing at all, so it ships no schema.
+    - migrate-fresh
+
+# Environment lives in `workbench/.env`, which Testbench copies into the
+# skeleton on every run. Keeping it there rather than in an `env:` block below
+# means one source of truth, and that file explains why its values are what
+# they are.

@@ -1,0 +1,17 @@
+# Normalize line endings.
+* text=auto eol=lf
+
+# Keep the dist archive to what an installing application actually uses.
+/.claude export-ignore
+/.github export-ignore
+/issues export-ignore
+/tests export-ignore
+/workbench export-ignore
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml.dist export-ignore
+/pint.json export-ignore
+/testbench.yaml export-ignore
+/SPEC.md export-ignore

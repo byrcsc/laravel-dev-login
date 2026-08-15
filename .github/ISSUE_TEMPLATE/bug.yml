@@ -1,0 +1,82 @@
+name: Bug report
+description: Report a reproducible problem with the package
+title: "[Bug]: "
+labels: ["bug"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for helping improve Laravel Dev Login. Remove real email addresses, tenant identifiers, and anything else you would not publish before sharing config or logs.
+    - type: textarea
+      id: what-happened
+      attributes:
+          label: What happened?
+          description: Tell us what happened and what you expected instead.
+          placeholder: I expected X, but Y happened.
+      validations:
+          required: true
+    - type: textarea
+      id: how-to-reproduce
+      attributes:
+          label: How to reproduce the bug
+          description: Provide the smallest sequence of steps that reliably reproduces the problem. Your `config/dev-login.php` profiles, with real addresses replaced, is usually the clearest form.
+          placeholder: "1. Configure a profile with...\n2. Visit /dev-login\n3. Click...\n4. Observe..."
+      validations:
+          required: true
+    - type: textarea
+      id: gates
+      attributes:
+          label: Which gates were open?
+          description: The page 404s by design when any safety gate says no. Tell us your `APP_ENV`, whether `DEV_LOGIN_ENABLED` was set, the host you visited it on, and your `environments` and `allowed_hosts` values.
+          placeholder: "APP_ENV=local, DEV_LOGIN_ENABLED=true, visited http://myapp.test/dev-login, allowed_hosts left at the defaults."
+      validations:
+          required: true
+    - type: input
+      id: package-version
+      attributes:
+          label: Package version
+          description: Which Laravel Dev Login version are you using?
+          placeholder: 1.0.0
+      validations:
+          required: true
+    - type: input
+      id: php-version
+      attributes:
+          label: PHP version
+          description: Which PHP version are you using?
+          placeholder: 8.3.0
+      validations:
+          required: true
+    - type: input
+      id: laravel-version
+      attributes:
+          label: Laravel version
+          description: Which Laravel version are you using?
+          placeholder: 12.0.0
+      validations:
+          required: true
+    - type: input
+      id: tenancy
+      attributes:
+          label: Tenancy package
+          description: If the problem involves a tenant-aware profile, which tenancy package are you using, and at which version?
+          placeholder: spatie/laravel-multitenancy 4.0
+      validations:
+          required: false
+    - type: dropdown
+      id: operating-systems
+      attributes:
+          label: Which operating systems does this happen with?
+          description: You may select more than one.
+          multiple: true
+          options:
+              - macOS
+              - Windows
+              - Linux
+    - type: textarea
+      id: notes
+      attributes:
+          label: Notes
+          description: Add any other relevant context, such as your guard configuration or a stack trace.
+      validations:
+          required: false

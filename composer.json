@@ -1,0 +1,95 @@
+{
+    "name": "byrcsc/laravel-dev-login",
+    "description": "A one-click development login page for Laravel, with named profiles that authenticate through your own guards and can carry a tenant.",
+    "keywords": [
+        "laravel",
+        "dev-login",
+        "development",
+        "authentication",
+        "guards",
+        "multitenancy",
+        "developer-experience",
+        "local"
+    ],
+    "homepage": "https://github.com/byrcsc/laravel-dev-login",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Catapang",
+            "email": "ryan@ryancatapang.com",
+            "role": "Full-Stack Engineer"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "illuminate/auth": "^12.0||^13.0",
+        "illuminate/contracts": "^12.0||^13.0",
+        "illuminate/http": "^12.0||^13.0",
+        "illuminate/routing": "^12.0||^13.0",
+        "illuminate/support": "^12.0||^13.0",
+        "illuminate/view": "^12.0||^13.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.3.1",
+        "laravel/pint": "^1.14",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^10.0||^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ByRcsc\\LaravelDevLogin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ByRcsc\\LaravelDevLogin\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ByRcsc\\LaravelDevLogin\\DevLoginServiceProvider"
+            ]
+        }
+    },
+    "support": {
+        "issues": "https://github.com/byrcsc/laravel-dev-login/issues",
+        "forum": "https://github.com/byrcsc/laravel-dev-login/discussions",
+        "docs": "https://github.com/byrcsc/laravel-dev-login#readme",
+        "security": "https://github.com/byrcsc/laravel-dev-login/security/policy",
+        "source": "https://github.com/byrcsc/laravel-dev-login"
+    },
+    "funding": [
+        {
+            "type": "buy_me_a_coffee",
+            "url": "https://www.buymeacoffee.com/ryancatapang"
+        }
+    ]
+}
