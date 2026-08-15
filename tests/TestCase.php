@@ -50,6 +50,16 @@ abstract class TestCase extends Orchestra
         foreach ($this->bootConfig as $key => $value) {
             $app['config']->set($key, $value);
         }
+
+        // `app.env` is read through the application rather than the config
+        // repository once the framework has booted, so the two are kept in
+        // step here. Booting into a chosen environment is most of what the
+        // gate tests do.
+        if (array_key_exists('app.env', $this->bootConfig)) {
+            $environment = (string) $this->bootConfig['app.env'];
+
+            $app->detectEnvironment(static fn (): string => $environment);
+        }
     }
 
     /**
