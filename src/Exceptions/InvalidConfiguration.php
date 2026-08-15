@@ -22,6 +22,14 @@ final class InvalidConfiguration extends InvalidArgumentException
         );
     }
 
+    public static function tenantResolver(string $resolver, string $contract): self
+    {
+        return new self(
+            "The configured dev login tenant resolver [{$resolver}] does not implement {$contract}. "
+            .'Check the [tenant_resolver] key in config/dev-login.php.'
+        );
+    }
+
     public static function path(string $given): self
     {
         return new self(

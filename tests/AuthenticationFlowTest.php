@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use ByRcsc\LaravelDevLogin\Exceptions\InvalidConfiguration;
+use ByRcsc\LaravelDevLogin\Tests\Support\FakeTenantResolver;
 use ByRcsc\LaravelDevLogin\Tests\Support\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
@@ -141,7 +142,10 @@ describe('the redirect chain', function (): void {
     it('ignores the intended URL for a tenant-bound profile', function (): void {
         bootWith(
             ['owner' => ['label' => 'Owner', 'email' => 'admin@example.com', 'tenant' => 'acme']],
-            ['dev-login.default_redirect' => '/from-the-config'],
+            [
+                'dev-login.default_redirect' => '/from-the-config',
+                'dev-login.tenant_resolver' => FakeTenantResolver::class,
+            ],
         );
 
         seedUser('admin@example.com');
