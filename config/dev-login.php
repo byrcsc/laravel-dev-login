@@ -93,14 +93,29 @@ return [
     | text, and a minimal profile is the two lines the first example shows.
     |
     |     'admin' => [
-    |         'label'    => 'Admin',
-    |         'email'    => 'admin@example.com',
-    |         'guard'    => null,   // null uses the default guard
-    |         'remember' => false,
-    |         'tenant'   => null,   // handed to the tenant resolver as-is
-    |         'redirect' => null,   // null follows the precedence chain
-    |         'resolver' => null,   // null uses the resolver below
+    |         'label'            => 'Admin',
+    |         'email'            => 'admin@example.com',
+    |         'guard'            => null,   // null uses the default guard
+    |         'remember'         => false,
+    |         'tenant'           => null,   // handed to the tenant resolver as-is
+    |         'redirect'         => null,   // null follows the precedence chain
+    |         'resolver'         => null,   // null uses the resolver below
+    |         'fire_login_event' => true,   // false logs in silently
     |     ],
+    |
+    | `guard` must name a session guard from your `config/auth.php`; token and
+    | API guards are out of scope. `remember` hands Laravel's session guard the
+    | remember flag, and that guard writes a remember token to the user exactly
+    | as it does on a real login - the one write a login causes, and Laravel's
+    | rather than this package's.
+    |
+    | Laravel's `Login` event fires by default, so anything an application hangs
+    | on a real login also runs here. Setting `fire_login_event` to false
+    | silences the guard for that one login, which means `Login` and the
+    | `Authenticated` event the guard fires alongside it.
+    |
+    | A setting this list does not name is a typo, and a typo is an exception
+    | rather than a line that quietly does nothing.
     |
     | Profiles point at users that already exist. Seeding them is your
     | application's job, which is why this file is a good place to read the

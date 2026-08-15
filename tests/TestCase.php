@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ByRcsc\LaravelDevLogin\Tests;
 
 use ByRcsc\LaravelDevLogin\DevLoginServiceProvider;
+use ByRcsc\LaravelDevLogin\Tests\Support\User;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -42,10 +44,34 @@ abstract class TestCase extends Orchestra
         $this->refreshApplication();
     }
 
+    /**
+     * The framework's own `users` table, and nothing of the package's: it
+     * ships no schema because it writes nothing.
+     *
+     * Called by the tests that need users rather than by every test, because
+     * most of this suite boots applications the gates refuse to open, and a
+     * migration run is an expensive way to prove a route does not exist.
+     */
+    public function withUsersTable(): void
+    {
+        $this->loadLaravelMigrations();
+
+        // MySQL and PostgreSQL keep their rows between tests, where SQLite in
+        // memory hands each test an empty database. The table starts empty on
+        // every engine rather than where the last test left it.
+        DB::table('users')->delete();
+    }
+
     protected function defineEnvironment($app): void
     {
+        // The package drives a session guard, and a session needs cookies an
+        // application can encrypt. Fixed rather than generated so a failure is
+        // reproducible; it protects nothing.
+        $app['config']->set('app.key', 'base64:GLXTBOOtsAv0YyRb2Vy5J5PS/w4Cc6vfCzZLwLVeb0Q=');
+
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', $this->databaseConnection());
+        $app['config']->set('auth.providers.users.model', User::class);
 
         foreach ($this->bootConfig as $key => $value) {
             $app['config']->set($key, $value);

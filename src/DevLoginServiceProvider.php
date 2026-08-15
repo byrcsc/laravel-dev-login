@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ByRcsc\LaravelDevLogin;
 
 use ByRcsc\LaravelDevLogin\Exceptions\DevLoginEnabledInProduction;
+use ByRcsc\LaravelDevLogin\Exceptions\InvalidConfiguration;
+use ByRcsc\LaravelDevLogin\Http\Controllers\DevLoginController;
 use ByRcsc\LaravelDevLogin\Http\Middleware\EnsureHostIsAllowed;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
@@ -30,7 +32,8 @@ final class DevLoginServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-dev-login')
-            ->hasConfigFile('dev-login');
+            ->hasConfigFile('dev-login')
+            ->hasViews('dev-login');
     }
 
     public function packageRegistered(): void
@@ -59,12 +62,38 @@ final class DevLoginServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Reached only when every boot-time gate has agreed. The routes it
-     * registers land in issue 04; the host gate is applied there, on top of
-     * the application's own middleware from config.
+     * Reached only when every boot-time gate has agreed, so a failing gate
+     * leaves nothing to forbid.
+     *
+     * There is deliberately no GET route that authenticates: a GET that logs
+     * you in can be fired by an image tag or a prefetch.
      */
     private function registerRoutes(): void
     {
-        //
+        $path = $this->config()->get('dev-login.path', 'dev-login');
+
+        if (! is_string($path) || $path === '') {
+            throw InvalidConfiguration::path(get_debug_type($path));
+        }
+
+        $middleware = $this->config()->get('dev-login.middleware', ['web']);
+
+        if (! is_array($middleware)) {
+            throw InvalidConfiguration::middleware(get_debug_type($middleware));
+        }
+
+        $middleware = array_values($middleware);
+
+        $router = $this->app->make(Router::class);
+
+        $router->middleware([...$middleware, self::HOST_MIDDLEWARE])->group(function (Router $router) use ($path): void {
+            $router->get($path, [DevLoginController::class, 'show'])->name('dev-login.show');
+            $router->post($path.'/{profile}', [DevLoginController::class, 'attempt'])->name('dev-login.attempt');
+        });
+    }
+
+    private function config(): Repository
+    {
+        return $this->app->make(Repository::class);
     }
 }
