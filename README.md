@@ -81,18 +81,28 @@ The full shape of a profile, with every key at its default:
 ```php
 'profiles' => [
     'admin' => [
-        'label'    => 'Admin',
-        'email'    => 'admin@example.com',
-        'guard'    => null,   // null uses the default guard
-        'remember' => false,
-        'tenant'   => null,   // handed to the tenant resolver as-is
-        'redirect' => null,   // null follows the precedence chain
-        'resolver' => null,   // null uses the configured resolver
+        'label'            => 'Admin',
+        'email'            => 'admin@example.com',
+        'guard'            => null,   // null uses the default guard
+        'remember'         => false,
+        'tenant'           => null,   // handed to the tenant resolver as-is
+        'redirect'         => null,   // null follows the precedence chain
+        'resolver'         => null,   // null uses the configured resolver
+        'fire_login_event' => true,   // false logs in silently
     ],
 ],
 ```
 
-The array key is the route parameter and `label` is the button text.
+The array key is the route parameter and `label` is the button text. `guard`
+names a session guard from your own `config/auth.php`, and a profile that names
+anything else says so rather than failing later.
+
+A click authenticates through Laravel's session guard, which means Laravel's
+`Login` event fires: side effects an application hangs on a real login, such as
+recording a last-seen timestamp, also run on a dev login. That is the default
+because a login that skips them is not the login you are trying to reproduce.
+Setting `fire_login_event` to `false` silences the guard for that one login,
+which means `Login` and the `Authenticated` event fired alongside it.
 
 ## Safety
 
