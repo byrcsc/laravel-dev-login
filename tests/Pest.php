@@ -23,6 +23,41 @@ uses()->beforeEach(function (): void {
 })->in(__DIR__);
 
 /**
+ * Rebuild the application with the package switched on and the given profiles.
+ *
+ * Whether the routes exist, and whether the gates opened, is decided while the
+ * application boots, so every test that wants a working dev login starts by
+ * booting one.
+ *
+ * @param  array<string, array<string, mixed>>  $profiles
+ * @param  array<string, mixed>  $extra
+ */
+function bootDevLogin(array $profiles, array $extra = []): void
+{
+    test()->rebootWith(array_merge([
+        'dev-login.enabled' => true,
+        'dev-login.profiles' => $profiles,
+    ], $extra));
+}
+
+/**
+ * The same, plus the users table, for the tests that go on to log somebody in.
+ *
+ * The migrations are not run by `bootDevLogin()` itself, because most of this
+ * suite boots applications the gates refuse to open, and a migration run is an
+ * expensive way to prove a route does not exist.
+ *
+ * @param  array<string, array<string, mixed>>  $profiles
+ * @param  array<string, mixed>  $extra
+ */
+function bootDevLoginWithUsers(array $profiles, array $extra = []): void
+{
+    bootDevLogin($profiles, $extra);
+
+    test()->withUsersTable();
+}
+
+/**
  * Put a user in the application's users table.
  *
  * Seeding is the application's job, and in this suite the application is us.

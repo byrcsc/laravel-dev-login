@@ -188,7 +188,19 @@ rarely means anything in another.
 The page is one publishable Blade view rendering a `<x-dev-login::profiles>`
 component, which you can drop anywhere yourself. It has no CSS dependencies,
 just a small inline style block, and it groups the buttons by tenant when your
-profiles name any.
+profiles name any. Buttons carry labels, never the email addresses behind them,
+so a screenshot of this page is not a list of accounts.
+
+Embedding the component in a login page of your own is one line, and it needs
+nothing from the surrounding page:
+
+```blade
+<x-dev-login::profiles />
+```
+
+It asks the safety gates itself rather than trusting the page it is on, so on
+any environment or host where the package is not allowed to run it renders
+nothing at all.
 
 ```bash
 php artisan vendor:publish --tag=dev-login-views

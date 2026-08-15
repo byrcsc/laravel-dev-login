@@ -9,22 +9,8 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 
-/**
- * @param  array<string, array<string, mixed>>  $profiles
- * @param  array<string, mixed>  $extra
- */
-function bootWith(array $profiles, array $extra = []): void
-{
-    test()->rebootWith(array_merge([
-        'dev-login.enabled' => true,
-        'dev-login.profiles' => $profiles,
-    ], $extra));
-
-    test()->withUsersTable();
-}
-
 beforeEach(function (): void {
-    bootWith([
+    bootDevLoginWithUsers([
         'admin' => ['label' => 'Admin', 'email' => 'admin@example.com'],
         'member' => ['label' => 'Member', 'email' => 'member@example.com', 'remember' => true],
     ]);
@@ -73,7 +59,7 @@ it('fires the login event, so anything hung on a real login also runs', function
 });
 
 it('keeps quiet for a profile that opts out of the login event', function (): void {
-    bootWith([
+    bootDevLoginWithUsers([
         'silent' => [
             'label' => 'Silent',
             'email' => 'admin@example.com',
@@ -94,7 +80,7 @@ it('keeps quiet for a profile that opts out of the login event', function (): vo
 
 describe('the redirect chain', function (): void {
     it('follows the profile first', function (): void {
-        bootWith(
+        bootDevLoginWithUsers(
             ['admin' => ['label' => 'Admin', 'email' => 'admin@example.com', 'redirect' => '/from-the-profile']],
             ['dev-login.default_redirect' => '/from-the-config'],
         );
@@ -107,7 +93,7 @@ describe('the redirect chain', function (): void {
     });
 
     it('follows the intended URL next', function (): void {
-        bootWith(
+        bootDevLoginWithUsers(
             ['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']],
             ['dev-login.default_redirect' => '/from-the-config'],
         );
@@ -120,7 +106,7 @@ describe('the redirect chain', function (): void {
     });
 
     it('falls back to the configured default', function (): void {
-        bootWith(
+        bootDevLoginWithUsers(
             ['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']],
             ['dev-login.default_redirect' => '/from-the-config'],
         );
@@ -140,7 +126,7 @@ describe('the redirect chain', function (): void {
      * somewhere that no longer exists.
      */
     it('ignores the intended URL for a tenant-bound profile', function (): void {
-        bootWith(
+        bootDevLoginWithUsers(
             ['owner' => ['label' => 'Owner', 'email' => 'admin@example.com', 'tenant' => 'acme']],
             [
                 'dev-login.default_redirect' => '/from-the-config',
@@ -170,7 +156,7 @@ it('authenticates on the profile guard, not only the default one', function (): 
     config()->set('auth.providers.admins', ['driver' => 'eloquent', 'model' => User::class]);
     config()->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
 
-    bootWith([
+    bootDevLoginWithUsers([
         'web' => ['label' => 'Web', 'email' => 'member@example.com'],
         'admin' => ['label' => 'Admin', 'email' => 'admin@example.com', 'guard' => 'admin'],
     ], [
@@ -218,7 +204,7 @@ it('protects the attempt route with CSRF', function (): void {
 });
 
 it('moves both routes when the path is configured', function (): void {
-    bootWith(
+    bootDevLoginWithUsers(
         ['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']],
         ['dev-login.path' => 'secret/way-in'],
     );
@@ -233,7 +219,7 @@ it('moves both routes when the path is configured', function (): void {
 });
 
 it('refuses to register routes on a path or a middleware list it cannot read', function (mixed $config, string $expected): void {
-    expect(fn () => bootWith(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], $config))
+    expect(fn () => bootDevLoginWithUsers(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], $config))
         ->toThrow(InvalidConfiguration::class, $expected);
 })->with([
     'a path that is not a string' => [['dev-login.path' => ['dev-login']], 'Check the [path] key'],
@@ -254,7 +240,7 @@ it('applies the application middleware from config, and the host gate after it',
  */
 describe('a gate that says no', function (): void {
     it('leaves no route behind when the flag is off', function (): void {
-        bootWith(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], ['dev-login.enabled' => false]);
+        bootDevLoginWithUsers(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], ['dev-login.enabled' => false]);
 
         expect(Route::getRoutes()->getByName('dev-login.show'))->toBeNull();
 
@@ -263,7 +249,7 @@ describe('a gate that says no', function (): void {
     });
 
     it('leaves no route behind in an environment nobody opted into', function (): void {
-        bootWith(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], ['app.env' => 'staging']);
+        bootDevLoginWithUsers(['admin' => ['label' => 'Admin', 'email' => 'admin@example.com']], ['app.env' => 'staging']);
 
         $this->get('/dev-login')->assertNotFound();
     });

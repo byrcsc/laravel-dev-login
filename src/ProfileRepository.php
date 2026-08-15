@@ -49,6 +49,41 @@ final class ProfileRepository
         return $profiles;
     }
 
+    /**
+     * The profiles in the order a page shows them: tenants in the order they
+     * were configured, because a config file is written in the order somebody
+     * wanted to read it, and the profiles with no tenant last.
+     *
+     * @return list<array{tenant: string|null, profiles: list<Profile>}>
+     */
+    public function groupedByTenant(): array
+    {
+        $tenants = [];
+        $untenanted = [];
+
+        foreach ($this->all() as $profile) {
+            if ($profile->hasTenant()) {
+                $tenants[(string) $profile->tenant][] = $profile;
+
+                continue;
+            }
+
+            $untenanted[] = $profile;
+        }
+
+        $groups = [];
+
+        foreach ($tenants as $tenant => $profiles) {
+            $groups[] = ['tenant' => (string) $tenant, 'profiles' => $profiles];
+        }
+
+        if ($untenanted !== []) {
+            $groups[] = ['tenant' => null, 'profiles' => $untenanted];
+        }
+
+        return $groups;
+    }
+
     public function find(string $key): Profile
     {
         $configured = $this->configured();
