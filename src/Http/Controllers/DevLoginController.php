@@ -23,11 +23,14 @@ final class DevLoginController
         private readonly Repository $config,
     ) {}
 
+    /**
+     * The page is a wrapper around the profiles component, and the component
+     * reads the profiles itself so that it works the same way on a page an
+     * application wrote. There is nothing left for this to pass it.
+     */
     public function show(): View
     {
-        return view('dev-login::index', [
-            'profiles' => $this->profiles->all(),
-        ]);
+        return view('dev-login::index');
     }
 
     public function attempt(Request $request, string $profile): RedirectResponse

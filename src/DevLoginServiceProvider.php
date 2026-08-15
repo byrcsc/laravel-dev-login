@@ -11,6 +11,7 @@ use ByRcsc\LaravelDevLogin\Http\Middleware\EnsureHostIsAllowed;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -53,6 +54,10 @@ final class DevLoginServiceProvider extends PackageServiceProvider
         }
 
         $this->app->make(Router::class)->aliasMiddleware(self::HOST_MIDDLEWARE, EnsureHostIsAllowed::class);
+
+        // Registered whatever the gates say, because the component answers to
+        // them itself and an application may embed it on a page of its own.
+        Blade::componentNamespace('ByRcsc\\LaravelDevLogin\\View\\Components', 'dev-login');
 
         if (! $gatekeeper->passes()) {
             return;
