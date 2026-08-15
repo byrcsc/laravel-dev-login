@@ -6,6 +6,7 @@ namespace ByRcsc\LaravelDevLogin\Tests;
 
 use ByRcsc\LaravelDevLogin\DevLoginServiceProvider;
 use ByRcsc\LaravelDevLogin\Tests\Support\User;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -54,6 +55,11 @@ abstract class TestCase extends Orchestra
     public function withUsersTable(): void
     {
         $this->loadLaravelMigrations();
+
+        // MySQL and PostgreSQL keep their rows between tests, where SQLite in
+        // memory hands each test an empty database. The table starts empty on
+        // every engine rather than where the last test left it.
+        DB::table('users')->delete();
     }
 
     protected function defineEnvironment($app): void
