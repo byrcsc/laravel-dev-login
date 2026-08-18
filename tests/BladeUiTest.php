@@ -14,13 +14,16 @@ beforeEach(function (): void {
     ]);
 });
 
-it('shows the application, the environment, and a button per profile', function (): void {
+it('shows the application, environment, and identity details for each profile', function (): void {
     $this->get('/dev-login')
         ->assertOk()
         ->assertSee(config('app.name'))
         ->assertSee('testing')
         ->assertSee('Admin')
-        ->assertSee('Member');
+        ->assertSee('admin@example.com')
+        ->assertSee('Member')
+        ->assertSee('member@example.com')
+        ->assertSee('web guard');
 });
 
 it('posts each button to its own profile, with a CSRF token', function (): void {
@@ -31,17 +34,6 @@ it('posts each button to its own profile, with a CSRF token', function (): void 
         ->toContain('action="'.route('dev-login.attempt', 'member').'"')
         ->toContain('method="POST"')
         ->toContain('name="_token"');
-});
-
-/*
- * An email address on a button is an account identifier in every screenshot
- * and every screen-share of this page.
- */
-it('never puts a profile email on the page', function (): void {
-    $content = (string) $this->get('/dev-login')->getContent();
-
-    expect($content)->not->toContain('admin@example.com')
-        ->and($content)->not->toContain('member@example.com');
 });
 
 it('groups the buttons by tenant, and puts the tenantless ones last', function (): void {

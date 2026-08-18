@@ -92,7 +92,7 @@ Open `http://localhost:8000/dev-login`.
 - The profiles with no tenant last, under no heading.
 - A line under the buttons saying anybody who can reach the page can sign in
   as any profile on it.
-- No email addresses anywhere on the page. Labels only.
+- Each profile shows its label, email address, and authentication guard.
 
 ### 2. Logging in, per guard
 

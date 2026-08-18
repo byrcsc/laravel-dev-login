@@ -89,8 +89,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | The one noun this package introduces: a named, preconfigured way into
-    | the application. Each key is the route parameter, `label` is the button
-    | text, and a minimal profile is the two lines the first example shows.
+    | the application. Each key is the route parameter, `label` is the name
+    | shown on the button, and a minimal profile is the two lines the first
+    | example shows.
     |
     |     'admin' => [
     |         'label'            => 'Admin',
