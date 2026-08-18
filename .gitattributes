@@ -3,6 +3,7 @@
 
 # Keep the dist archive to what an installing application actually uses.
 /.claude export-ignore
+/art export-ignore
 /.github export-ignore
 /issues export-ignore
 /tests export-ignore

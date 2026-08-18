@@ -10,6 +10,12 @@ A development login page for Laravel. Configure named profiles, visit
 guard. Profiles can carry a tenant, so a click can put you inside the right
 tenant as well as the right account.
 
+<p align="center">
+  <img src="art/dev-login.png" alt="The default dev-login page listing profiles grouped by tenant, each with a guard button">
+  <br>
+  <em>The default dev-login page. Publish the view to make the layout, styling, and copy your own.</em>
+</p>
+
 Your users stay yours. The package never writes to your users table, never
 touches passwords, and never authenticates anything itself: it drives Laravel's
 session guard and gets out of the way. Five independent gates decide whether it
