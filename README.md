@@ -5,8 +5,6 @@
 [![GitHub PHPStan Action Status](https://img.shields.io/github/actions/workflow/status/byrcsc/laravel-dev-login/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/byrcsc/laravel-dev-login/actions?query=workflow%3APHPStan+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/byrcsc/laravel-dev-login.svg?style=flat-square)](https://packagist.org/packages/byrcsc/laravel-dev-login)
 
-> **In progress, pre-release.**
-
 A development login page for Laravel. Configure named profiles, visit
 `/dev-login`, and click one to be authenticated as that user through your own
 guard. Profiles can carry a tenant, so a click can put you inside the right
@@ -209,6 +207,12 @@ php artisan vendor:publish --tag=dev-login-views
 
 Publishing the views is the whole customization story. There is no theming
 config, and that is a decision rather than an omission: see Safety.
+
+## Documentation
+
+Read the complete [documentation][documentation].
+
+[documentation]: https://docs.rcsc.dev/laravel-dev-login/v1/introduction
 
 ## Out of scope
 
