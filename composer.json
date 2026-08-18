@@ -83,7 +83,7 @@
     "support": {
         "issues": "https://github.com/byrcsc/laravel-dev-login/issues",
         "forum": "https://github.com/byrcsc/laravel-dev-login/discussions",
-        "docs": "https://github.com/byrcsc/laravel-dev-login#readme",
+        "docs": "https://docs.rcsc.dev/laravel-dev-login/v1/introduction",
         "security": "https://github.com/byrcsc/laravel-dev-login/security/policy",
         "source": "https://github.com/byrcsc/laravel-dev-login"
     },

@@ -5,8 +5,6 @@
 [![GitHub PHPStan Action Status](https://img.shields.io/github/actions/workflow/status/byrcsc/laravel-dev-login/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/byrcsc/laravel-dev-login/actions?query=workflow%3APHPStan+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/byrcsc/laravel-dev-login.svg?style=flat-square)](https://packagist.org/packages/byrcsc/laravel-dev-login)
 
-> **In progress, pre-release.**
-
 A development login page for Laravel. Configure named profiles, visit
 `/dev-login`, and click one to be authenticated as that user through your own
 guard. Profiles can carry a tenant, so a click can put you inside the right
@@ -50,10 +48,10 @@ A profile is a named, preconfigured way into your application: a user
 reference, a guard, an optional tenant, and an optional redirect. It is the one
 noun this package introduces.
 
-The page shows one button per profile. Clicking a button resolves the profile
-to a user that already exists, makes its tenant current if it has one,
-authenticates through the profile's guard, and redirects. That is the whole
-model.
+The page shows one button per profile, with its label, email, and guard.
+Clicking a button resolves the profile to a user that already exists, makes
+its tenant current if it has one, authenticates through the profile's guard,
+and redirects. That is the whole model.
 
 Profiles point at users, they do not create them. Seeding is your
 application's job, which means the published config is a good place to read the
@@ -188,8 +186,9 @@ rarely means anything in another.
 The page is one publishable Blade view rendering a `<x-dev-login::profiles>`
 component, which you can drop anywhere yourself. It has no CSS dependencies,
 just a small inline style block, and it groups the buttons by tenant when your
-profiles name any. Buttons carry labels, never the email addresses behind them,
-so a screenshot of this page is not a list of accounts.
+profiles name any. Each button shows the profile label as its name, the
+configured email, and the guard it will authenticate through, so similar
+development accounts are easy to distinguish before signing in.
 
 Embedding the component in a login page of your own is one line, and it needs
 nothing from the surrounding page:
@@ -208,6 +207,12 @@ php artisan vendor:publish --tag=dev-login-views
 
 Publishing the views is the whole customization story. There is no theming
 config, and that is a decision rather than an omission: see Safety.
+
+## Documentation
+
+Read the complete [documentation][documentation].
+
+[documentation]: https://docs.rcsc.dev/laravel-dev-login/v1/introduction
 
 ## Out of scope
 
